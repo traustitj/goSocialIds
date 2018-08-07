@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"./socialid"
 )
 
@@ -10,14 +11,17 @@ func generateForYear(year int, c chan []string) {
 }
 
 func main() {
-	// size := 2018 - 1900
-	c := make(chan []string, 2018-1900+1)
+	c := make(chan []string)
 
 	for i := 1900; i < 2018; i++ {
-		go generateForYear(1974, c)
+		go generateForYear(i, c)
 	}
-	for range c {
-		<-c
-		// fmt.Printf("Generated %d ids for year %d\n", len(ids), i)
+	total := 0
+	for i := 1900; i < 2018; i++ {
+		x := <-c
+		fmt.Printf("%d ids for year %d\n", len(x), i)
+		total += len(x)
 	}
+
+	fmt.Println("Totally generated numbers : ", total)
 }
